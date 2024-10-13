@@ -23,6 +23,12 @@ const ChatApp = () => {
 
     void fetchData();
 
+    const interval = setInterval(() => {
+      void fetchData();
+    }, 3000);
+
+    return () => clearInterval(interval);
+
   }, []);
 
 
