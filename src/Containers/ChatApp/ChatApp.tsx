@@ -26,12 +26,29 @@ const ChatApp = () => {
   }, []);
 
 
+  const sendMessage = async (message: string, author: string) => {
+    const data = new URLSearchParams();
+    data.set('message', message);
+    data.set('author', author);
+
+    try {
+      await fetch(url, {
+        method: 'POST',
+          body: data,
+      });
+      void fetchData();
+    } catch (e) {
+      alert('Error: ' + e);
+    }
+  }
+
+
 
   return (
     <div className="container mt-5">
       <div className="chat-app-container border rounded shadow p-3" style={{ backgroundColor: '#f1f3f5' }}>
         <ChatContainer messages={messages}/>
-        <ChatForm />
+        <ChatForm onSendMessage={sendMessage}/>
       </div>
     </div>
   );
