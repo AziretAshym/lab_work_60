@@ -7,8 +7,10 @@ const ChatApp = () => {
 
   const url = 'http://146.185.154.90:8000/messages';
   const [messages, setMessages] = useState<IMessage[]>([]);
+  const [loader, setLoader] = useState<boolean>(false)
 
   const fetchData = async () => {
+    setLoader(true);
     try {
       const response = await fetch(url);
       const messagesData = await response.json();
@@ -16,6 +18,8 @@ const ChatApp = () => {
 
     } catch (e) {
       alert('Error ' + e);
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -25,7 +29,7 @@ const ChatApp = () => {
 
     const interval = setInterval(() => {
       void fetchData();
-    }, 3000);
+    }, 7000);
 
     return () => clearInterval(interval);
 
@@ -53,7 +57,14 @@ const ChatApp = () => {
   return (
     <div className="container mt-5">
       <div className="chat-app-container border rounded shadow p-3" style={{ backgroundColor: '#f1f3f5' }}>
-        <ChatContainer messages={messages}/>
+        {loader && (
+          <div className="d-flex justify-content-center">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
+        {!loader && <ChatContainer messages={messages} />}
         <ChatForm onSendMessage={sendMessage}/>
       </div>
     </div>
